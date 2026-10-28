@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Diffie-Hellman</title>
+</head>
+<body>
+
+<h2>Diffie-Hellman Key Exchange</h2>
+
+Prime p: <input id="p" type="number" value="23"><br><br>
+Base g: <input id="g" type="number" value="5"><br><br>
+Alice key: <input id="a" type="number" value="4"><br><br>
+Bob key: <input id="b" type="number" value="3"><br><br>
+
+<button onclick="run()">Generate Secret</button>
+
+<p>Alice's Public Key: <span id="A"></span></p>
+<p>Bob's Public Key: <span id="B"></span></p>
+<p>Alice's Shared Secret: <span id="S1"></span></p>
+<p>Bob's Shared Secret: <span id="S2"></span></p>
+
+<script>
+function pow(g, a, p) {
+    let r = 1n;
+    g = BigInt(g); a = BigInt(a); p = BigInt(p);
+
+    while (a > 0n) {
+        if (a % 2n) r = r * g % p;
+        g = g * g % p;
+        a /= 2n;
+    }
+    return r;
+}
+
+function run() {
+    let p = document.getElementById("p").value;
+    let g = document.getElementById("g").value;
+    let a = document.getElementById("a").value;
+    let b = document.getElementById("b").value;
+
+    if (!p || !g || !a || !b || +p < 2 || +g < 1 || +g >= +p || +a < 1 || +b < 1) {
+        alert("Enter valid values");
+        return;
+    }
+
+    let A = pow(g, a, p), B = pow(g, b, p);
+    let S1 = pow(B, a, p), S2 = pow(A, b, p);
+
+    document.getElementById("A").innerText = A;
+    document.getElementById("B").innerText = B;
+    document.getElementById("S1").innerText = S1;
+    document.getElementById("S2").innerText = S2;
+}
+</script>
+
+</body>
+</html>
+
